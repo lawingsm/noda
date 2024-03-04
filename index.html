@@ -1,0 +1,122 @@
+<!DOCTYPE html> 
+<html> 
+
+
+
+<head> 
+    <meta charset=utf-8 />
+	<title>NoDA Brewery Crawl  </title>
+	<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="  crossorigin=""/>
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lora" rel="stylesheet">
+    
+
+    <style>
+        body{
+            margin: 0; 
+            padding: 0; 
+            background: "gray";
+            font-family: "Noto Sans", sans-serif;
+            color: #3d3d3d; 
+        }
+
+        h1{ 
+            position: absolute; 
+            margin-top: 0; 
+            top: 10px; 
+            left: 45px; 
+            font-size: 2em; 
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 0.04em;
+            background: rgba (256, 256, 256, .4 );
+            border: 1px blue; 
+            border-radius: 3px; 
+            z-index: 800
+        }
+        
+        h2{ 
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: normal;
+        }
+
+        #map{ height: 600px;
+        }
+
+
+    </style>
+        
+
+</head> 
+
+<body> 
+    <h1> NoDA Brewery Crawl  </h1> 
+    <div id='map'></div>
+
+    <section> 
+        <h2> 
+            NoDA District, Charlotte, NC 
+              </h2>
+            <p> This is the brewery crawl for my 21st birthday! We start at Divine Barrell and end with the best pizza at Benny's!</p> 
+            <p> Map Author: Sierra Lawing</p>
+    </section>
+
+        <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+	    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+        <script src="/data /noda.js" ></script>
+
+    <script> 
+    
+
+        var options = {
+            center: [-80.7965374,35.2503343],
+            zoom: 16 
+        }
+        console.log(data)
+
+    var map= L.map('map', options); 
+
+     //creation of the leaflet map 
+        var map = L.map('map', options); 
+     //request to load map 
+     var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+}).addTo(map);
+
+//leaflet marker 
+L.marker(map.getCenter())
+    .bindTooltip(message)
+    .addTo(map)
+    .openTooltip(); 
+
+    var myRoute = L.geoJson(data).addTo(map);
+    map.fitbounds(myRoute.getBounds())
+
+//NoDA Route 
+    var myRoute = L.geoJson(data,{
+        filter: function(feature){
+            if(feature.geometry.type == "LineString"){
+                return feature;
+            }
+        }, 
+        style: function(feature){
+            return {
+                color: "blue", 
+                weight: 6, 
+                opacity: 1, 
+                dashArray: "5,5"
+            }
+        }
+    }).addTo(map); 
+            
+
+
+
+        </script>
+
+</body>
+
+</html>
